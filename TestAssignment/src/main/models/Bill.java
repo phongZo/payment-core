@@ -16,6 +16,10 @@ public class Bill {
         PAID
     }
 
+    public String showBill() {
+        return(getId() + " " + getType() + " " + getAmount() + " " + getDueDate() + " " + getState() + " " + getProvider());
+    }
+
     public Bill(int id, String type, long amount, LocalDate dueDate, String provider) {
         this.id = id;
         this.type = type;
@@ -29,8 +33,16 @@ public class Bill {
         return id;
     }
 
-    public String getProvider() {
-        return provider;
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public long getAmount() {
@@ -41,11 +53,27 @@ public class Bill {
         this.amount = amount;
     }
 
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
+
     public BillState getState() {
         return state;
     }
 
     public void setState(BillState state) {
         this.state = state;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
     }
 }
