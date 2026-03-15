@@ -22,15 +22,23 @@ public class BillServiceTest {
                 1,
                 "ELECTRIC",
                 200000,
-                LocalDate.now(),
+                LocalDate.of(2026,3,25),
                 "EVN"
         ));
 
         billRepository.add(new Bill(
                 2,
+                "WATER",
+                150000,
+                LocalDate.of(2026,3,20),
+                "SAVACO"
+        ));
+
+        billRepository.add(new Bill(
+                3,
                 "INTERNET",
-                800000,
-                LocalDate.now(),
+                300000,
+                LocalDate.of(2026,4,1),
                 "VNPT"
         ));
 
@@ -40,15 +48,18 @@ public class BillServiceTest {
     @Test
     public void getAllBills_shouldReturnAllBills() {
         List<Bill> bills = billService.getAllBills();
-        assertEquals(2, bills.size());
+        assertEquals(3, bills.size());
     }
 
     @Test
     public void searchByProvider_shouldReturnMatchingBills() {
-        List<Bill> bills = billService.searchByProvider("VNPT");
+        String result = billService.searchBillByProvider("VNPT");
+        System.out.println(result);
+        String expected =
+                "Bill No. Type Amount Due Date State PROVIDER\n" +
+                        "1. INTERNET 300000 01/04/2026 NOT_PAID VNPT";
 
-        assertEquals(1, bills.size());
-        assertEquals("VNPT", bills.get(0).getProvider());
+        assertEquals(expected.trim(), result.trim());
     }
 
     @Test
@@ -63,5 +74,17 @@ public class BillServiceTest {
     public void getBill_shouldReturnNull_whenBillNotFound() {
         Bill bill = billService.getBill(99);
         assertNull(bill);
+    }
+
+    @Test
+    public void dueDate_shouldReturnBillsSortedByDueDate() {
+        String result = billService.getDueBills();
+        String expected =
+                "Bill No. Type Amount Due Date State PROVIDER\n" +
+                        "1. WATER 150000 20/03/2026 NOT_PAID SAVACO\n" +
+                        "2. ELECTRIC 200000 25/03/2026 NOT_PAID EVN\n" +
+                        "3. INTERNET 300000 01/04/2026 NOT_PAID VNPT";
+
+        assertEquals(expected.trim(), result.trim());
     }
 }

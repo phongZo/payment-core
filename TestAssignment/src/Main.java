@@ -2,12 +2,16 @@ import main.models.Bill;
 import main.models.User;
 import main.repository.BillRepository;
 import main.repository.PaymentRepository;
+import main.scheduler.PaymentScheduler;
 import main.services.BillService;
 import main.services.PaymentService;
 import main.services.UserService;
+import main.utils.DateUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -24,6 +28,8 @@ public class Main {
 
         initBillsData(billRepository);
 
+        new PaymentScheduler(paymentService);
+
         while (true) {
             String input = scanner.nextLine();
             String[] parts = input.split(" ");
@@ -38,24 +44,37 @@ public class Main {
                     break;
 
                 case "LIST_BILL":
-                    billService.getAllBills().forEach(b ->
-                            System.out.println(b.showBill()));
+                    System.out.println(billService.listBills());
                     break;
 
                 case "PAY":
+                    List<Integer> billIds = new ArrayList<>();
+                    for (int i = 1; i < parts.length; i++) {
+                        billIds.add(Integer.parseInt(parts[i]));
+                    }
+                    System.out.println(paymentService.payBills(billIds));
+                    break;
+
+                case "SCHEDULE":
                     int billId = Integer.parseInt(parts[1]);
-                    System.out.println(paymentService.payBill(billId));
+                    LocalDate date = LocalDate.parse(
+                            parts[2],
+                            DateUtils.FORMATTER
+                    );
+                    System.out.println(paymentService.schedulePayment(billId, date));
+                    break;
+
+                case "DUE_DATE":
+                    System.out.println(billService.getDueBills());
                     break;
 
                 case "LIST_PAYMENT":
-                    paymentService.getPayments().forEach(p ->
-                            System.out.println(p.showPayment()));
+                    System.out.println(paymentService.listPayments());
                     break;
 
                 case "SEARCH_BILL_BY_PROVIDER":
                     String provider = parts[1];
-                    billService.searchByProvider(provider)
-                            .forEach(b -> System.out.println(b.showBill()));
+                    System.out.println(billService.searchBillByProvider(provider));
                     break;
 
                 case "EXIT":

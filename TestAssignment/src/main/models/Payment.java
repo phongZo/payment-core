@@ -7,39 +7,25 @@ public class Payment {
     private long amount;
     private LocalDate paymentDate;
     private PaymentState state;
-    private int billId;
+    private long billId;
+    private LocalDate scheduledDate;
 
     public enum PaymentState {
         PROCESSED,
         PENDING
     }
 
-    public String showPayment() {
-        return getId() + " " + getAmount() + " " + getPaymentDate() + " " + getState() + " " + getBillId();
-    }
-
-    public Payment(int id, long amount, LocalDate paymentDate, PaymentState state, int billId) {
+    public Payment(int id, long amount, LocalDate paymentDate, PaymentState state, long billId, LocalDate scheduledDate) {
         this.id = id;
         this.amount = amount;
         this.paymentDate = paymentDate;
         this.state = state;
         this.billId = billId;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+        this.scheduledDate = scheduledDate;
     }
 
     public long getAmount() {
         return amount;
-    }
-
-    public void setAmount(long amount) {
-        this.amount = amount;
     }
 
     public LocalDate getPaymentDate() {
@@ -58,11 +44,13 @@ public class Payment {
         this.state = state;
     }
 
-    public int getBillId() {
+    public long getBillId() {
         return billId;
     }
 
-    public void setBillId(int billId) {
-        this.billId = billId;
+    public LocalDate getScheduledDate() { return scheduledDate; }
+
+    public void setScheduledDate(LocalDate scheduledDate) {
+        this.scheduledDate = scheduledDate;
     }
 }

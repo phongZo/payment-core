@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class BillRepository {
     private Map<Long, Bill> bills = new HashMap<>();
@@ -21,12 +20,5 @@ public class BillRepository {
 
     public List<Bill> findAll() {
         return new ArrayList<>(bills.values());
-    }
-
-    public List<Bill> findByProvider(String provider) {
-        return bills.values()
-                .stream()
-                .filter(b -> b.getProvider().equalsIgnoreCase(provider))
-                .collect(Collectors.toList());
     }
 }
